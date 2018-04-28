@@ -1,43 +1,60 @@
 package com.itii.planning.gui;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JComboBox;
 
-public class MenuDeroulant extends JComboBox implements ItemListener
+public class MenuDeroulant extends JComboBox implements ActionListener
 {
     Listing menu_deroulant;
-   
+
     public MenuDeroulant()
     {
-        this.addItem(menu_deroulant.Liste);
-        this.addItem(menu_deroulant.Semaine);
-        this.addItem(menu_deroulant.Mois);
-        this.addItemListener(this);
-        this.addActionListener(this);
-    }
+        this.addItem(Listing.Liste);
+        this.addItem(Listing.Semaine);
+        this.addItem(Listing.Mois);
 
-    @Override
-    public void itemStateChanged(ItemEvent item_event)
-    {
-        System.out.println("EventListener : event sur " + item_event.getItem());
-        System.out.println("ActionListener : action sur " + this.getSelectedItem());  
-//        if(item_event.getStateChange()==item_event.SELECTED)
-//        {
-//            if(this.getSelectedItem().toString().equals("Liste"))
-//            {
-//                System.out.println("Liste");
-//            }
-//            
-//        }
-//        
-    }
-    
-    public void action(ActionEvent item_action)
-    {
-        System.out.println("ActionListener : action sur " + this.getSelectedItem());      
+        ActionListener actionListener = new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                MenuDeroulant mr = (MenuDeroulant) (actionEvent.getSource());
+
+                TaskPanel lp = MainWindow.getInstance().getMainPanel()
+                        .getTaskPanel();
+
+                PanneauList tablist = lp.getPanneauList();
+                tablist.setVisible(false);
+
+                PanneauSemaine tabsemaine = lp.getPanneauSemaine();
+                tabsemaine.setVisible(false);
+
+                PanneauMois tabmois = lp.getPanneauMois();
+                tabmois.setVisible(false);
+
+                if ("Liste".equals(mr.getSelectedItem().toString()))
+                {
+                    tablist.setVisible(true);
+                }
+
+                if ("Semaine".equals(mr.getSelectedItem().toString()))
+                {
+                    tabsemaine.setVisible(true);
+                }
+                
+                if ("Mois".equals(mr.getSelectedItem().toString()))
+                {
+                    tabmois.setVisible(true);
+                }
+
+                lp.revalidate();
+                lp.repaint();
+            }
+        };
+
+        this.addActionListener(actionListener);
     }
 }

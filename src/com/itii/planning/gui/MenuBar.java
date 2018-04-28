@@ -12,7 +12,7 @@ public class MenuBar extends JMenuBar
     private JMenu aide = new JMenu("Aide");
     
     private JMenuItem quitter = new JMenuItem("Quitter");
-    private JMenuItem creer = new JMenuItem("Créer");
+    private JMenuItem creer = new JMenuItem("Creer");
     private JMenuItem editer = new JMenuItem("Editer");
     private JMenuItem marquer = new JMenuItem("Marquer");
     private JMenuItem dupliquer = new JMenuItem("Dupliquer");

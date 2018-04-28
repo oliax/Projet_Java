@@ -24,17 +24,20 @@ public class MainWindow extends JFrame
     
     private MainWindow() 
     {
+        setTitle("Projet de Java - Planning");
         setSize(500, 300);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.validate();
-        this.repaint();
+
         
        MainPanel mainpanel = new MainPanel();
        getContentPane().add(mainpanel);
 
        MenuBar menubar = new MenuBar();
        setJMenuBar(menubar);
+       
+       this.validate();
+       this.repaint();
         
     }
 }

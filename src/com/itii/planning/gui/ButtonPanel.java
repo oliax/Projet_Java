@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class ButtonPanel extends JPanel implements ActionListener
+public class ButtonPanel extends JPanel
 {
     JButton boutonCreer = new JButton("Creer");
     JButton boutonEditer = new JButton("Editer");
@@ -76,12 +76,5 @@ public class ButtonPanel extends JPanel implements ActionListener
         boutonMarquer.addActionListener(actionListener);
         boutonDupliquer.addActionListener(actionListener);
         boutonSupprimer.addActionListener(actionListener);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent arg0)
-    {
-        // TODO Auto-generated method stub
-        
     }
 }

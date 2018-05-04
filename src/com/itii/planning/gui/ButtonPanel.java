@@ -48,7 +48,7 @@ public class ButtonPanel extends JPanel implements ActionListener
 
                 if (mr==boutonEditer)
                 {
-                    System.out.println("Editer");
+                    tablist.editTask();
                 }
                 
                 if (mr==boutonMarquer)
@@ -58,12 +58,12 @@ public class ButtonPanel extends JPanel implements ActionListener
                 
                 if (mr==boutonDupliquer)
                 {
-                    System.out.println("Dupliquer");
+                    tablist.copyTask();
                 }
                 
                 if (mr==boutonSupprimer)
                 {
-                    System.out.println("Supprimer");
+                    tablist.delTask();
                 }
 
                 lp.revalidate();
@@ -84,5 +84,4 @@ public class ButtonPanel extends JPanel implements ActionListener
         // TODO Auto-generated method stub
         
     }
-
 }

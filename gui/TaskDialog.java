@@ -1,0 +1,161 @@
+package com.itii.planning.gui;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowListener;
+import java.util.Calendar;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+
+import org.jdatepicker.JDatePicker;
+import org.jdatepicker.UtilDateModel;
+
+import com.itii.planning.database.Database;
+import com.sun.glass.events.WindowEvent;
+
+public class TaskDialog extends JDialog
+{
+    private JDatePicker calendar;
+    private JDialog dialog = new JDialog();
+    JLabel tasklabel = new JLabel("Nom de la tache :   ");
+    JLabel datelabel = new JLabel("Date due :");
+    JLabel detaillabel = new JLabel("Details :");
+    public JTextField taskname = new JTextField("",40);
+    public JTextField detailname = new JTextField("",30);
+    JButton OKButton = new JButton("OK");
+    JButton CancelButton = new JButton("Annuler");
+    public Object ID=0;
+    
+    public TaskDialog (String title)
+    {      
+        this.setTitle(title);
+        this.setSize(600, 300);
+        
+        this.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        this.add(tasklabel, gbc);
+        gbc.gridx = 1;
+        this.add(taskname, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        this.add(datelabel, gbc);
+        gbc.gridx = 1;
+        this.add(getCalendar(),gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.weighty = 0;
+        this.add(detaillabel, gbc);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 1;
+        gbc.weighty = 1;
+        this.add(detailname,gbc);
+       
+        
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        this.add(OKButton,gbc);
+        gbc.gridx = 1;
+        this.add(CancelButton,gbc);
+        
+        ActionListener actionListener = new ActionListener()
+        {
+
+            @Override
+            public void actionPerformed(ActionEvent actionEvent)
+            {
+                JButton mr = (JButton) (actionEvent.getSource());
+
+                TaskPanel lp = MainWindow.getInstance().getMainPanel()
+                        .getTaskPanel();
+
+                PanneauList tablist = lp.getPanneauList();
+
+                if (mr==OKButton)
+                {
+                    Database.writeData(title);
+                    if(title.equals("Nouvelle tache"))
+                    {
+                        String id=Database.ID();
+                        ((DefaultTableModel) tablist.taskList.getModel()).addRow( new Object[] { getName(),getDate(),getDetails(),id});
+                    }
+                    
+                    if(title.equals("Edition de tache"))
+                    {
+                        ((DefaultTableModel) tablist.taskList.getModel()).setValueAt(getName(),tablist.taskList.getSelectedRow(),0);
+                        ((DefaultTableModel) tablist.taskList.getModel()).setValueAt(getDate(),tablist.taskList.getSelectedRow(),1);
+                        ((DefaultTableModel) tablist.taskList.getModel()).setValueAt(getDetails(),tablist.taskList.getSelectedRow(),2);
+                    }
+                    
+                    tablist.dialog.dispose();
+                    tablist.dialog = null;    
+                }
+                if (mr==CancelButton)
+                {
+                    tablist.dialog.dispose();
+                    tablist.dialog = null;
+                }
+
+            }
+        };
+        
+        OKButton.addActionListener(actionListener);
+        CancelButton.addActionListener(actionListener);
+        
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); 
+    }
+    
+   
+    // Accesseur sur notre calendrier
+    public JDatePicker getCalendar()
+    {
+        if (calendar == null)
+        {
+            UtilDateModel model = new UtilDateModel();
+            Calendar cal = Calendar.getInstance();
+            model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
+            cal.get(Calendar.DAY_OF_WEEK));
+            calendar = new JDatePicker(model);
+        }
+        return calendar;
+    }
+
+    // Accesseur mettant � jour la date affich�e
+    public void setDate(String date)
+    {
+        getCalendar().getFormattedTextField().setText(date);
+    }
+    
+    // Accesseur r�cup�rant la date actuellement affich�e
+    public String getDate()
+    {
+        return getCalendar().getFormattedTextField().getText();
+    }
+    
+    // Accesseur r�cup�rant le nom
+    public String getName()
+    {
+        return taskname.getText();
+    }
+    
+    // Accesseur r�cup�rant le nom
+    public String getDetails()
+    {
+        return detailname.getText();
+    }
+}
